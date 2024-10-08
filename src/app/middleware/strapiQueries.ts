@@ -6,6 +6,7 @@ export const UPDATE_PROPERTY_MUTATION = gql`
     updateProperty(documentId: $documentId, data: $data) {
       __typename
       catastroId
+      registrationId
       media {
         __typename
         previewUrl
@@ -16,14 +17,12 @@ export const UPDATE_PROPERTY_MUTATION = gql`
       location {
         __typename
         id
-        address
+       address
         codePostal
         country
         lat
         long
         state
-        street
-        city
       }
       characteristics {
         __typename
@@ -78,6 +77,7 @@ export const LIST_PROPERTIES_QUERY = gql`
       __typename
       documentId
       catastroId
+      registrationId
       media {
         __typename
         previewUrl
@@ -89,13 +89,13 @@ export const LIST_PROPERTIES_QUERY = gql`
       location {
         __typename
         id
-        civicName
+        address
         codePostal
         country
         lat
         long
         state
-        street
+        
       }
       characteristics {
         __typename

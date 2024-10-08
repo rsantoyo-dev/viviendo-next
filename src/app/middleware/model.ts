@@ -1,18 +1,37 @@
 export type Entity = Property | Agent; // Union type for Property and Agent
+export type DynamicComponentDataModel = Location | Characteristics | Contact ; // Union type for dynamic components
 export type FieldValue = string | number | boolean | null | Record<string, unknown> | FieldValue[];
 
+export type Property = {
+  documentId?: string;
+  __typename?: string; // Property typename for dynamic rendering
+  catastroId: string;
+  registrationId?: string; // Registration ID
+  media?: Media[]; // Array of media objects
+  location?: Location; // Location object
+  characteristics?: Characteristics; // Characteristics object (specific to properties)
+};
 
+export type Agent = {
+  documentId: string;
+  __typename: 'Agent';
+  id: string;  
+  firstName: string;
+  lastName: string;
+  agentLicenseNumber: string;
+  agency: Agency;
+  contact: Contact;
+  location: Location;
+};
 export type Location = {
    __typename: string; // Location typename for dynamic rendering
   id?: string;
   address?: string; // Renamed civicName to address for consistency
-  civicName?: string; // Can be kept for compatibility
   codePostal?: string;
   country?: string;
   lat?: string | null; // Allow nulls based on the sample data
   long?: string | null; // Allow nulls based on the sample data
   state?: string;
-  street?: string;
   city?: string; // Added city field to match typical location structure
 };
 
@@ -35,28 +54,21 @@ export type Media = {
   name: string; // Name of the media file
 };
 
-export type Property = {
-  documentId: string;
-  __typename: string; // Property typename for dynamic rendering
-  catastroId: string;
-  media: Media[]; // Array of media objects
-  location?: Location; // Location object
-  characteristics?: Characteristics; // Characteristics object (specific to properties)
-};
+export type PageInfo  ={
+  page: number;
+  pageCount: number;
+  pageSize: number;
+  total: number;
+}
 
-export type Agent = {
-  documentId: string;
-  __typename: 'Agent';
-  id: string;  
-  firstName: string;
-  lastName: string;
-  agentLicenseNumber: string;
-  agency: Agency;
-  contact: Contact;
-  location: Location;
-};
+export type PropertiesConnectionResponse = {
+  nodes: Property[];
+  pageInfo: PageInfo;
+}
+
 
 export type Contact = {
+  __typename: string; // To help differentiate media types
   email: string;
   primaryPhone: string;
   website?: string | null; // Optional website
@@ -108,6 +120,7 @@ export const defaultProperty: Property = {
   documentId: '',
   __typename: 'Property',
   catastroId: '',
+  registrationId: '',
   media: [defaultMedia],
   location: defaultLocation,
   characteristics: defaultCharacteristics

@@ -1,193 +1,165 @@
-// dynamic-entity.tsx
+// DynamicEntity.tsx
 "use client";
-import React, { Fragment, useEffect, useState } from "react";
-import SettingsBar from "./settings-bar";
-import { flattenAndRenameObject } from "../utilities/helpers";
-import DynamicComponent from "./dynamic-component";
-import { Entity } from "../middleware/model"; // Import Entity type
 
+import { Fragment, useState } from "react";
+import Image from "next/image";
+import {
+  Agent,
+  Characteristics,
+  DynamicComponentDataModel,
+  FieldValue,
+  Media,
+  Property,
+} from "../middleware/model";
+import DynamicComponent from "./dynamic-component";
+import DataItem from "./data-item";
+import { baseURL } from "../apolloClient";
+import { updateProperty } from "../middleware/requests";
+type Entity = Property | (Agent & { [key: string]: FieldValue }); // Union type for Property and Agent with index signature
 interface DynamicEntityProps {
-  data: Entity[]; // The dataset can be an array of Property or Agent
-  defaultVisibleColumns?: string[]; // Default visible columns
-  groupedColumns?: { [key: string]: string[] }; // Column groups for filtering
+  data: Entity;
+  onUpdate?: (updatedData: Entity) => void; // Optional callback to notify parent of updates
+  isTopLevel?: boolean; // Determines if the component is top-level
 }
 
-const DynamicEntity: React.FC<DynamicEntityProps> = ({
-  data,
-  defaultVisibleColumns = [],
-  groupedColumns = {},
-}) => {
-  // Log the received data to verify __typename presence
-  useEffect(() => {
-    console.log("DynamicEntity received data:", data);
-    data.forEach((item, index) => {
-      console.log(`Item ${index} __typename:`, item.__typename);
-    });
-  }, [data]);
+const DynamicEntity: React.FC<DynamicEntityProps> = ({ data }) => {
+  // const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [dynamicEntityData, setDynamicEntityData] = useState<Entity>(
+    data as Entity
+  );
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const [expandedRows, setExpandedRows] = useState<number[]>([]);
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(defaultVisibleColumns);
-  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: "asc" | "desc" } | null>(null);
-
-  if (data.length === 0) {
+  // Log initial data
+  const renderImage = (media: Media) => {
     return (
-      <div className="bg-gray-100 dark:bg-gray-800 text-gray-500 p-4 rounded-lg shadow-sm">
-        No data available
-      </div>
+      <img
+        src={baseURL + media.url}
+        alt={media.name}
+        className="flex w-32 h-32 object-cover rounded-lg"
+      />
     );
-  }
-
-  // Flatten and rename object fields (generic for any data type)
-  const flattenedData = data.map((item, index) => {
-    const flattened = flattenAndRenameObject(item);
-    console.log(`Flattened Data Item ${index}:`, flattened);
-    return flattened;
-  });
-
-  const allHeaders = Object.keys(flattenedData[0]);
-  console.log("All Headers:", allHeaders);
-
-  // Handle visibility changes from the SettingsBar component
-  const handleVisibilityChange = (updatedVisibleColumns: string[]) => {
-    console.log("Visibility Changed:", updatedVisibleColumns);
-    setVisibleColumns(updatedVisibleColumns);
   };
 
-  // Handle toggle event from the SettingsBar component
-  const handleSettingsToggle = (isExpanded: boolean) => {
-    console.log("Settings Toggle:", isExpanded);
-    setIsSettingsExpanded(isExpanded);
-  };
-
-  // Function to handle sorting when a header is clicked
-  const handleSort = (key: string) => {
-    console.log(`Sorting by: ${key}`);
-    let direction: "asc" | "desc" = "asc";
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
+  const onSave = async () => {
+    console.log('save', dynamicEntityData);
+    // Add your save logic here, for example, making an API call to save the data
+    const property: Property = {
+      documentId: dynamicEntityData.documentId,
+      registrationId: dynamicEntityData.registrationId as string,
+      catastroId: dynamicEntityData.catastroId as string,
+      location: dynamicEntityData.location,
+      characteristics: dynamicEntityData.characteristics as Characteristics | undefined,
+     
     }
-    setSortConfig({ key, direction });
+   await updateProperty(
+      dynamicEntityData.documentId,
+      property)
+   }
+  
+
+  const valueFieldHandler = (key: string, value: FieldValue) => {
+    console.log("Value Change:", key, value);
+    setDynamicEntityData((prevData) => {
+      return {
+        ...prevData,
+        [key]: value,
+      };
+    });
   };
 
-  // Sorting function for the data
-  const sortedData = React.useMemo(() => {
-    if (sortConfig !== null) {
-      console.log("Sorting Data:", sortConfig);
-      const sorted = [...flattenedData].sort((a, b) => {
-        const aValue = a[sortConfig.key];
-        const bValue = b[sortConfig.key];
+  const valueComponentHandler = (
+    key: string,
+    value: DynamicComponentDataModel
+  ) => {
+    console.log("Value Change:", key, value);
+    setDynamicEntityData((prevData) => {
+      return {
+        ...prevData,
+        [key]: value,
+      };
+    });
+  };
 
-        if (aValue === null || bValue === null) return 0;
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          return sortConfig.direction === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-        } else if (typeof aValue === "number" && typeof bValue === "number") {
-          return sortConfig.direction === "asc" ? aValue - bValue : bValue - aValue;
-        }
-
-        return 0;
-      });
-      console.log("Sorted Data:", sorted);
-      return sorted;
-    }
-    console.log("Unsorted Data:", flattenedData);
-    return flattenedData;
-  }, [flattenedData, sortConfig]);
-
-  // Render the headers with sorting capability
-  const renderHeaders = allHeaders
-    .filter((header) => visibleColumns.includes(header))
-    .map((header) => (
-      <th
-        key={header}
-        onClick={() => handleSort(header)}
-        className="cursor-pointer border-b border-gray-300 dark:border-gray-700 border-r border-dashed border-gray-300 dark:border-gray-700 px-2 py-2 text-left font-bold text-gray-800 dark:text-gray-300 text-sm xl:text-base"
-      >
-        <span>{header.charAt(0).toUpperCase() + header.slice(1)}</span>
-        {sortConfig?.key === header ? (
-          sortConfig.direction === "asc" ? " 🔼" : " 🔽"
-        ) : (
-          ""
-        )}
-      </th>
-    ));
-
-  const renderRows = sortedData.length
-    ? sortedData.map((item, rowIndex: number) => {
-        // Retrieve the original item (before flattening)
-        const originalItem = data[rowIndex];
-        console.log(`Original Item ${rowIndex}:`, originalItem);
-
-        // Log the original item's __typename
-        useEffect(() => {
-          console.log(`Row ${rowIndex} originalItem __typename:`, originalItem.__typename);
-        }, [originalItem.__typename]);
-
-        const renderDataItems = allHeaders
-          .filter((key) => visibleColumns.includes(key))
-          .map((key, index) => (
-            <td
-              key={index}
-              className="border-b border-gray-300 dark:border-gray-700 border-r border-dashed border-gray-300 dark:border-gray-700 px-2 py-2 text-sm text-gray-800 dark:text-gray-300 md:text-base"
-            >
-              {item[key] !== undefined ? String(item[key]) : "N/A"}
-            </td>
-          ));
-
-        const toggleRow = () => {
-          setIsSettingsExpanded(false);
-          if (expandedRows.includes(rowIndex)) {
-            setExpandedRows(expandedRows.filter((index) => index !== rowIndex));
-          } else {
-            setExpandedRows([...expandedRows, rowIndex]);
-          }
-        };
-
-        const isRowExpanded = expandedRows.includes(rowIndex);
-
-        return (
-          <Fragment key={rowIndex}>
-            <tr
-              className={`cursor-pointer transition-colors ${
-                isRowExpanded ? "bg-gray-200 dark:bg-gray-600" : "hover:bg-gray-200 dark:hover:bg-gray-400"
-              }`}
-              onClick={toggleRow}
-            >
-              {renderDataItems}
-            </tr>
-
-            {isRowExpanded && (
-              <tr className="">
-                <td colSpan={allHeaders.length} className="p-2">
-                  {/* Use DynamicComponent to render the dynamic content */}
-                  <DynamicComponent data={originalItem} />
-                </td>
-              </tr>
-            )}
-          </Fragment>
-        );
-      })
-    : null;
+  const isTypeName = (data: unknown): boolean =>
+    data !== null && typeof data === "object" && "__typename" in data;
 
   return (
-    <Fragment>
-      <SettingsBar
-        groupedColumns={groupedColumns}
-        visibleColumns={visibleColumns}
-        onVisibilityChange={handleVisibilityChange}
-        onToggle={handleSettingsToggle}
-        isExpanded={isSettingsExpanded}
-      />
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="">{renderHeaders}</tr>
-          </thead>
-          <tbody>{renderRows}</tbody>
-        </table>
+    <div className="flex flex-wrap p-2 border dark:border-gray-800 rounded-lg bg-gray-100 dark:bg-gray-900 dark:text-gray-200 shadow-md w-full">
+      <div className="flex flex p-2 w-full justify-between items-center">
+        <div>{data.__typename}</div>
+        <button
+          onClick={() => {
+            isEditing && onSave();
+            setIsEditing(!isEditing);
+          }}
+          className="bg-primary dark:bg-gray-800 hover:bg-primary-light  text-xs font-bold p-2 px-4 rounded"
+        >
+          {isEditing ? "Save" : "Edit"}
+        </button>
       </div>
-    </Fragment>
+      <div className="flex p-2 flex-wrap border dark:border-gray-800 rounded-lg bg-gray-100 dark:bg-gray-900 dark:text-gray-200 shadow-md w-full">
+        {Object.entries(dynamicEntityData)
+          .filter(([key]) => key !== "__typename" && key !== "documentId")
+          .map(([key, value]) => {
+            console.log(key, value, typeof value);
+
+            if (typeof value === "object") {
+              return (
+                <Fragment key={key}>
+                  {Array.isArray(value) ? (
+                    <div className="flex flex-col w-full p-2">
+                      <span className="font-bold">{key}</span>
+                      <div className="flex flex-wrap gap-2 p-2">
+                        {value.map(
+                          (item, index) =>
+                            true && (
+                              <div key={index} className="flex ">
+                                {typeof item === "object" &&
+                                  item !== null &&
+                                  "__typename" in item &&
+                                  String(item.__typename) === "UploadFile" &&
+                                  renderImage(item as Media)}
+                              </div>
+                            )
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex w-full md:w-1/2 xl:w-1/3">
+                      <DynamicComponent
+                        data={value as Entity}
+                        isEditing={isEditing}
+                        onChange={(newValue) =>
+                          valueComponentHandler(key, newValue)
+                        }
+                      />
+                    </div>
+                  )}
+                </Fragment>
+              );
+            } else {
+              return (
+                true && (
+                  <div key={key} className="flex w-full md:w-1/2 xl:w-1/3 p-2">
+                    {
+                      <DataItem
+                        key={key}
+                        label={key}
+                        value={value as string}
+                        isEditing={isEditing}
+                        onChange={(newValue) =>
+                          valueFieldHandler(key, newValue)
+                        }
+                      />
+                    }
+                  </div>
+                )
+              );
+            }
+            return null; // or any valid JSX element
+          })}
+      </div>
+    </div>
   );
 };
 

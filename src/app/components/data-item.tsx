@@ -1,58 +1,65 @@
 import React from "react";
 import { iconMap, IconMapType } from "../ui/icons";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { FieldValue } from "../middleware/model";
+import { Checkbox, TextField, Typography, Box, IconButton } from "@mui/material";
 
 interface DataItemProps {
-  label: string; // Label for the field
-  value: string | number | boolean | null; // The actual value to display or edit
-  iconName?: string; // Optional icon name for the field
-  isEditing: boolean; // Flag to determine if the component is in editing mode
-  onChange: (newValue: string | number | boolean | null) => void; // Callback to update the value in edit mode
+  label: string;
+  value: FieldValue;
+  iconName?: string;
+  isEditing: boolean;
+  onChange: (newValue: string | number | boolean | null) => void;
 }
 
-const DataItem: React.FC<DataItemProps> = ({ label, value, iconName, isEditing, onChange }) => {
-  const IconComponent = iconName ? (iconMap as IconMapType)[iconName] : null; // Get the icon component dynamically
+const DataItem: React.FC<DataItemProps> = ({
+  label,
+  value,
+  iconName,
+  isEditing,
+  onChange,
+}) => {
+  const IconComponent = iconName ? (iconMap as IconMapType)[iconName] : null;
 
   // Render input elements for editing based on the type of value
   const renderEditField = () => {
-    // Checkbox for boolean values
     if (typeof value === "boolean") {
       return (
-        <input
-          type="checkbox"
+        <Checkbox
           checked={value}
           onChange={(e) => onChange(e.target.checked)}
-          className="border p-1 w-full bg-gray-100 dark:bg-gray-800 border-gray-600 text-gray-900 dark:text-gray-300"
+          color="primary"
         />
       );
     }
 
-    // Number input for numeric values
     if (typeof value === "number") {
       return (
-        <input
+        <TextField
           type="number"
           value={value !== null ? value : ""}
           onChange={(e) => onChange(parseFloat(e.target.value) || null)}
-          className="border p-1 w-full bg-gray-100 dark:bg-gray-800 border-gray-600 text-gray-900 dark:text-gray-300"
+          variant="outlined"
+          size="small"
+          fullWidth
         />
       );
     }
 
-    // Text input for string values
     return (
-      <input
+      <TextField
         type="text"
         value={value !== null ? value : ""}
         onChange={(e) => onChange(e.target.value || null)}
-        className="border p-1 w-full bg-gray-100 dark:bg-gray-800 border-gray-600 text-gray-900 dark:text-gray-300"
+        variant="outlined"
+        size="small"
+        fullWidth
       />
     );
   };
 
-  // Render the value based on its type
-  const renderField = () => {
-    if (value === null) return "N/A";
+  const renderField = (): React.ReactNode => {
+    if (value === null) return "NO";
 
     if (typeof value === "boolean") {
       return value ? (
@@ -62,26 +69,52 @@ const DataItem: React.FC<DataItemProps> = ({ label, value, iconName, isEditing, 
       );
     }
 
-    return value;
+    if (typeof value === "string" || typeof value === "number") {
+      return value;
+    }
+
+    return null;
   };
 
   return (
-    <div className="flex flex-col p-2 bg-gray-50 dark:bg-gray-800 min-w-20 max-w-full rounded-md shadow-sm">
+    <Box
+      width={100}
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      sx={{
+    
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
       {/* First Line: Icon and Label in the same row */}
-      <div className="flex items-center space-x-1 mb-1">
-        {IconComponent && <IconComponent className="h-4 w-4 text-gray-500 dark:text-gray-300" />}
-        {label && (
-          <span className="text-gray-800 dark:text-gray-200 text-xs truncate max-w-full">
-            {label}
-          </span>
+      <Box display="flex" alignItems="center" marginBottom={1}>
+        {IconComponent && (
+          <IconButton size="small">
+            <IconComponent />
+          </IconButton>
         )}
-      </div>
+        {label && (
+          <Typography variant="caption" color="textSecondary" noWrap>
+            {label}
+          </Typography>
+        )}
+      </Box>
 
       {/* Second Line: Render either the value or the editable field */}
-      <div className="text-gray-700 dark:text-gray-300 text-sm truncate max-w-full">
-        {isEditing ? renderEditField() : renderField()}
-      </div>
-    </div>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="body2" color="textPrimary" noWrap>
+          {isEditing ? renderEditField() : renderField()}
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,9 +1,7 @@
 import { Fragment } from "react";
-import PropertyCard from "../components/property-card";
 import { Property } from "../middleware/model";
 import { fetchAgents, fetchProperties } from "../middleware/requests";
-import DynamicEntity from "../components/dynamic-entity";
-import DynamicCard from "../components/dynamic-card";
+import DynamicEntity from "../components/dynamic-entity-list";
 
 export default async function Page() {
 
@@ -12,10 +10,10 @@ export default async function Page() {
   return (
     <DynamicEntity
       data={properties}
-      defaultVisibleColumns={["civicName", "street", "sqm", "Catastro ID"]}
+      defaultVisibleColumns={["registrationId", "address", "neighborhood", "sqm"]}
       groupedColumns={{
-        general: ["Catastro ID"],
-        location: ["street", "civicName", "state", "country"],
+        general: ["registrationId"],
+        location: ["address", "neighborhood", "city", "state", "country"],
         characteristics: ["sqm", "rooms", "bathrooms", "elevator", "pool"],
       }}
 

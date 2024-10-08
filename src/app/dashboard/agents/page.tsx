@@ -1,4 +1,4 @@
-import DynamicEntity from "@/app/components/dynamic-entity";
+import DynamicEntity from "@/app/components/dynamic-entity-list";
 import { fetchAgents } from "@/app/middleware/requests";
 import { Agent } from "@/app/middleware/model";
 

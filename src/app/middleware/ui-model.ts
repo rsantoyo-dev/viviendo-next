@@ -18,3 +18,4 @@ export type DataItemProps ={
     variant?: ViewVariant,
     title?: string,
   };
+
