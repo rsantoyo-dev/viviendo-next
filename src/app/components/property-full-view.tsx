@@ -24,13 +24,13 @@ export const baseURL = "http://localhost:1337";
 interface PropertyFullViewProps {
   data: Property;
   onUpdate?: (updatedData: Property) => void; // Optional callback to notify parent of updates
-  isTopLevel?: boolean; // Determines if the component is top-level
+  viewMode?: "full" | "card"; // New prop to switch between views
 }
 
 const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
   const theme = useTheme();
   return (
-    <Card sx={{ margin: 2 }}>
+    <Card>
       <Box
         display="flex"
         flexDirection="row"

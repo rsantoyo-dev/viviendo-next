@@ -1,12 +1,13 @@
 import { createTheme } from "@mui/material";
 
 export const theme = createTheme({
-    colorSchemes: {
-        dark: false,
+    palette: {
+        mode: 'dark',
+        background: {
+            paper: '#071429',
+        },
+
       },
-    shape: {
-      borderRadius: 2,
-    }
     
   });
   

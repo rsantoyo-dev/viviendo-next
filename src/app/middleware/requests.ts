@@ -3,12 +3,13 @@ import { Agent, PropertiesConnectionResponse, Property } from "./model";
 import {
   LIST_AGENTS_QUERY,
   LIST_PROPERTIES_QUERY,
+  PROPERTIES_CONNECTION_QUERY,
   UPDATE_AGENT_MUTATION,
   UPDATE_PROPERTY_MUTATION,
 } from "./strapiQueries";
 import gql from "graphql-tag";
 
-export async function fetchNodeProperties(
+export async function fetchPropertiesConnection(
   page: number = 1,
   pageSize: number = 3
 ): Promise<PropertiesConnectionResponse> {
@@ -16,37 +17,7 @@ export async function fetchNodeProperties(
     const { data } = await client.query<{
       properties_connection: PropertiesConnectionResponse;
     }>({
-      query: gql`
-        query Nodes($pagination: PaginationArg) {
-          properties_connection(pagination: $pagination) {
-            nodes {
-              listedPrice
-              propertyStatus
-              location {
-                address
-                neighborhood
-                borough
-                city
-                codePostal
-                lat
-                long
-                country
-                state
-              }
-              characteristics {
-                rooms
-                bathrooms
-              }
-            }
-            pageInfo {
-              page
-              pageCount
-              pageSize
-              total
-            }
-          }
-        }
-      `,
+      query: PROPERTIES_CONNECTION_QUERY,
       variables: {
         pagination: {
           page,

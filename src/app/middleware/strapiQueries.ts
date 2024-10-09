@@ -70,6 +70,45 @@ export const UPDATE_AGENT_MUTATION = gql`
   }
 `;
 
+export const PROPERTIES_CONNECTION_QUERY = gql`
+query Nodes($pagination: PaginationArg) {
+  properties_connection(pagination: $pagination) {
+    nodes {
+      listedPrice
+      propertyStatus
+      media {
+        __typename
+        previewUrl
+        caption
+        url
+        name
+        formats
+      }
+      location {
+        address
+        neighborhood
+        borough
+        city
+        codePostal
+        lat
+        long
+        country
+        state
+      }
+      characteristics {
+        rooms
+        bathrooms
+      }
+    }
+    pageInfo {
+      page
+      pageCount
+      pageSize
+      total
+    }
+  }
+}
+`;
 
 export const LIST_PROPERTIES_QUERY = gql`
   query Properties {
