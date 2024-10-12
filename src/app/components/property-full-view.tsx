@@ -30,7 +30,7 @@ interface PropertyFullViewProps {
 const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
   const theme = useTheme();
   return (
-    <Card>
+    <Card >
       <Box
         display="flex"
         flexDirection="row"
@@ -94,7 +94,7 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
         </Box>
       </Box>
 
-      <ImageGallery media={data.media || []} />
+      <ImageGallery media={data.media || []} maxImagesToShow={6} />
 
       {data.characteristics && (
         <Box flex="1 1 45%">

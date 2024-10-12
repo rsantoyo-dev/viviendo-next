@@ -6,6 +6,8 @@ export type Property = {
   documentId?: string;
   __typename?: string; // Property typename for dynamic rendering
   catastroId: string;
+  listedPrice?: number; // Listed price
+  propertyStatus?: string; // Property status
   registrationId?: string; // Registration ID
   media?: Media[]; // Array of media objects
   location?: Location; // Location object
@@ -27,6 +29,7 @@ export type Location = {
    __typename: string; // Location typename for dynamic rendering
   id?: string;
   address?: string; // Renamed civicName to address for consistency
+  neighborhood?: string; // Added neighborhood field to match typical location structure
   codePostal?: string;
   country?: string;
   lat?: string | null; // Allow nulls based on the sample data

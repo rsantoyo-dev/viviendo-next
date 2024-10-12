@@ -46,9 +46,9 @@ const DynamicComponent: React.FC<DynamicComponentProps> = ({
       </Typography>
       <CardContent sx={{paddingY:0}}>
         <Box display="flex" flexWrap="wrap">
-          {Object.entries(localData)
+          {localData && Object.entries(localData)
             .filter(([key]) => key !== "__typename")
-            .filter(([key, value]) => isEditing || value !== null)
+            .filter(([, value]) => isEditing || value !== null)
             .map(([key, value]) => {
               return (
                 <Box p={1} key={key}>

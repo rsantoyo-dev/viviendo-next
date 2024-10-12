@@ -89,7 +89,9 @@ const DynamicEntity: React.FC<DynamicEntityProps> = ({ data }) => {
         <div>{data.__typename}</div>
         <button
           onClick={() => {
-            isEditing && onSave();
+            if (isEditing) {
+              onSave();
+            }
             setIsEditing(!isEditing);
           }}
           className="bg-primary dark:bg-gray-800 hover:bg-primary-light  text-xs font-bold p-2 px-4 rounded"

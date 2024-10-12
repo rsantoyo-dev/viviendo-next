@@ -181,18 +181,13 @@ const DynamicEntityList: React.FC<DynamicEntityListProps> = ({
             {isRowExpanded && (
               <tr>
                 <td colSpan={allHeaders.length} className="">
-                  {/* Use DynamicEntity to render the dynamic content with edit controls */}
-                  {originalItem.__typename === "Property" ? (
-                    <PropertyFullView data={originalItem as Property} />
-                  ) : (
-                    <DynamicEntity
+                <DynamicEntity
                       data={originalItem}
                       onUpdate={(updatedData) =>
                         handleUpdate(rowIndex, updatedData)
                       }
                       isTopLevel={true} // Indicate this is the top-level component with edit controls
                     />
-                  )}
                 </td>
               </tr>
             )}
