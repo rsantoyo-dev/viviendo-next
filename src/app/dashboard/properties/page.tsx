@@ -8,6 +8,7 @@ import PropertyFullView from "@/app/components/property-full-view";
 import PropertyCard from "@/app/components/property-card";
 import ViewList from "@mui/icons-material/ViewList";
 import { ViewModule } from "@mui/icons-material";
+import ViewChanger from "@/app/components/view-changer";
 
 const PAGE_SIZE = 4;
 
@@ -46,12 +47,7 @@ export default async function Page({
               totalPages={propertiesConnection.pageInfo.pageCount}
             />
           </Box>
-          <IconButton>
-            <ViewList></ViewList>
-          </IconButton>
-          <IconButton>
-            <ViewModule></ViewModule>
-          </IconButton>
+          <ViewChanger/>
         </Box>
 
         <Box display="flex" flexWrap="wrap">

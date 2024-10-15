@@ -14,7 +14,6 @@ type PaginatorProps = {
 const Paginator: FC<PaginatorProps> = ({ currentPage, totalPages }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const theme = useTheme();
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 
