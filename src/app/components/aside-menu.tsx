@@ -9,7 +9,7 @@ import {
 
 const AsideMenu: React.FC = () => {
   return (
-    <Box w-16 display={"flex"} flexDirection={"column"} height={"100vh"}>
+    <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
       <IconButton href="/dashboard/properties">
         <BuildingOfficeIcon></BuildingOfficeIcon>
       </IconButton>
