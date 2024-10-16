@@ -29,10 +29,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ data }) => {
   const theme = useTheme();
 
   return (
-    <Box
-      p={1}
-      width={{ xs: 1, md: 0.33, xl: 0.25 }}
-    >
+    
       <Card sx={{height:1}}>
         <CardMedia>
           <ImageGallery media={data.media || []} maxImagesToShow={1} />
@@ -76,7 +73,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ data }) => {
           </IconButton>
         </CardActions>
       </Card>
-    </Box>
+  
   );
 };
 

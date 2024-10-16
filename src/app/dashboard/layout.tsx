@@ -3,7 +3,7 @@ import React from "react";
 import NavDash from "../components/nav-dash";
 import AsideMenu from "../components/aside-menu";
 import { ThemeProvider } from "@emotion/react";
-import { CssBaseline, useMediaQuery } from "@mui/material";
+import { Box, CssBaseline, useMediaQuery } from "@mui/material";
 import { darkTheme, lightTheme } from "../ui/theme";
 
 export default function DashboardLayout({
@@ -16,19 +16,22 @@ export default function DashboardLayout({
 
   return (
     <ThemeProvider theme={prefersDarkMode ? darkTheme : lightTheme}>
-      <CssBaseline />
-      <section>
-        <NavDash />
-        <div className="flex">
-          {/* Sidebar */}
-          <AsideMenu />
 
-          {/* Main content area with a light soft gradient */}
-          <main className="flex-1 p-2 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-black">
+      <Box component="section">
+        <NavDash />
+
+        <Box display="flex">
+          <AsideMenu />
+          <Box
+            component="main"
+            flexGrow={1}
+            p={0}
+            bgcolor={'gray'}        
+          >
             {children}
-          </main>
-        </div>
-      </section>
+          </Box>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 }

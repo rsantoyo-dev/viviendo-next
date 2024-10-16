@@ -1,7 +1,7 @@
 // app/properties/page.tsx
 import { PropertiesConnectionResponse, Property } from "@/app/middleware/model";
 import { fetchPropertiesConnection } from "@/app/middleware/requests";
-import { Box, IconButton } from "@mui/material";
+import { Box, Grid2, IconButton } from "@mui/material";
 import { notFound } from "next/navigation";
 import Paginator from "@/app/components/paginator";
 import PropertyFullView from "@/app/components/property-full-view";
@@ -47,20 +47,23 @@ export default async function Page({
               totalPages={propertiesConnection.pageInfo.pageCount}
             />
           </Box>
-          <ViewChanger/>
+          <ViewChanger />
         </Box>
-
-        <Box display="flex" flexWrap="wrap">
+        
+        <Grid2 container padding={2} spacing={6}>
           {propertiesConnection.nodes.map((property: Property) => (
             <>
               {currentPageDisplay === "grid" ? (
-                <PropertyCard data={property} />
+                <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+                  <PropertyCard data={property} />
+                </Grid2>
               ) : (
                 <PropertyFullView data={property} />
               )}
             </>
           ))}
-        </Box>
+        </Grid2>
+
       </Box>
     );
   }
