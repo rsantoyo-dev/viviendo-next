@@ -13,15 +13,15 @@ import {
   Typography,
 } from "@mui/material";
 import ImageGallery from "./image-gallery";
-import { Property } from "../middleware/model";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
+import { Property, Property_Plain } from "../generated-interfaces/api/property";
 
 export const baseURL = "http://localhost:1337";
 
 interface PropertyCardProps {
-  data: Property;
-  onUpdate?: (updatedData: Property) => void; // Optional callback to notify parent of updates
+  data: Property_Plain;
+  onUpdate?: (updatedData: Property_Plain) => void; // Optional callback to notify parent of updates
   viewMode?: "full" | "card"; // New prop to switch between views
 }
 
@@ -44,12 +44,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ data }) => {
             <Typography
               variant="subtitle1"
               fontWeight="bold"
-              color="textSecondary"
+ 
             >
               {data.propertyStatus}
             </Typography>
           )}
-          {data.location && (
+          {data?.location && (
             <Box display="flex" flexDirection="column" p={0}>
               <Typography variant="caption" color="textSecondary">
                 {data.location?.address}

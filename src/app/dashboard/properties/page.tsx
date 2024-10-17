@@ -1,5 +1,5 @@
 // app/properties/page.tsx
-import { PropertiesConnectionResponse, Property } from "@/app/middleware/model";
+import { PropertiesConnectionResponse } from "@/app/middleware/model";
 import { fetchPropertiesConnection } from "@/app/middleware/requests";
 import { Box, Grid2, IconButton } from "@mui/material";
 import { notFound } from "next/navigation";
@@ -9,6 +9,7 @@ import PropertyCard from "@/app/components/property-card";
 import ViewList from "@mui/icons-material/ViewList";
 import { ViewModule } from "@mui/icons-material";
 import ViewChanger from "@/app/components/view-changer";
+import { Property, Property_Plain } from "@/app/generated-interfaces/api/property";
 
 const PAGE_SIZE = 4;
 

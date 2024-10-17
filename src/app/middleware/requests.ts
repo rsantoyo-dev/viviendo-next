@@ -1,5 +1,7 @@
 import client from "../apolloClient";
-import { Agent, PropertiesConnectionResponse, Property } from "./model";
+import { Agent } from "../generated-interfaces/api/agent";
+import { Property } from "../generated-interfaces/api/property";
+import {  PropertiesConnectionResponse } from "./model";
 import {
   LIST_AGENTS_QUERY,
   LIST_PROPERTIES_QUERY,

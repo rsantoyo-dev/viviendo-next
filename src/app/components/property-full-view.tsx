@@ -1,6 +1,5 @@
 'use client';
 import React from "react";
-import { DynamicComponentDataModel, Property } from "../middleware/model";
 import {
   Button,
   Card,
@@ -18,12 +17,13 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import DynamicComponent from "./dynamic-component";
 import ImageGallery from "./image-gallery";
+import { Property, Property_Plain } from "../generated-interfaces/api/property";
 
 export const baseURL = "http://localhost:1337";
 
 interface PropertyFullViewProps {
-  data: Property;
-  onUpdate?: (updatedData: Property) => void; // Optional callback to notify parent of updates
+  data: Property_Plain
+  onUpdate?: (updatedData: Property_Plain) => void; // Optional callback to notify parent of updates
   viewMode?: "full" | "card"; // New prop to switch between views
 }
 
@@ -40,10 +40,10 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
         {/* Property Info Section */}
         <Box display="flex" flexDirection="column" p={1}>
           <Typography variant="h5" component="div">
-            For Sale
+            {data.propertyStatus}
           </Typography>
           <Typography variant="subtitle2">
-            5581 rue alain, brossard, QC
+            {data.location?.address}, {data.location?.city}
           </Typography>
         </Box>
 
@@ -52,7 +52,7 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
           {/* Price Section */}
           <Box display="flex" p={1}>
             <Typography variant="h5" component="div">
-              $12,500,000
+              ${data.listedPrice}
             </Typography>
           </Box>
 
@@ -94,9 +94,23 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
         </Box>
       </Box>
 
-      <ImageGallery media={data.media || []} maxImagesToShow={6} />
+      {JSON.stringify(data.listedPrice)}
+      <ImageGallery media={data.media || []} maxImagesToShow={6} /> 
 
       {data.characteristics && (
+        <Box flex="1 1 45%">
+          <DynamicComponent
+            title="Characteristics"
+            data={data.characteristics} onChange={function (newValue: DynamicComponentDataModel): void {
+              throw new Error("Function not implemented.");
+            } }            
+          />
+        </Box>
+      )}
+
+      {/* <ImageGallery media={data.media || []} maxImagesToShow={6} /> */}
+
+      {/* {data.characteristics && (
         <Box flex="1 1 45%">
           <DynamicComponent
             title="Characteristics"
@@ -107,8 +121,8 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
             }}
           />
         </Box>
-      )}
-      <Box display="flex" flexDirection="row" flexWrap="wrap">
+      )} */}
+      {/* <Box display="flex" flexDirection="row" flexWrap="wrap">
         {data.characteristics && (
           <Box flex="1 1 45%">
             <DynamicComponent
@@ -133,7 +147,7 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
             />
           </Box>
         )}
-      </Box>
+      </Box> */}
 
       {/* Action Buttons */}
       <CardActions>

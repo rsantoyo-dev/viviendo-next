@@ -71,22 +71,14 @@ export const UPDATE_AGENT_MUTATION = gql`
 `;
 
 export const PROPERTIES_CONNECTION_QUERY = gql`
-query Nodes($pagination: PaginationArg) {
-  properties_connection(pagination: $pagination) {
+query Nodes($pagination: PaginationArg, $sort: [String], $filters: PropertyFiltersInput, $status: PublicationStatus) {
+  properties_connection(pagination: $pagination, sort: $sort, filters: $filters, status: $status) {
     nodes {
       listedPrice
       propertyStatus
-      media {
-        __typename
-        previewUrl
-        caption
-        url
-        name
-        formats
-      }
       location {
         address
-        neighborhood
+        neighborhood      
         borough
         city
         codePostal
@@ -95,9 +87,37 @@ query Nodes($pagination: PaginationArg) {
         country
         state
       }
-      characteristics {
-        rooms
+      
+      propertyType
+      building {
+        attached
+        buildYear
+        bungalow
+        century
+        detached
+        id
+        livingArea
+        newConstruction
+        semiDetached
+        splitLevel
+      }
+      features {
         bathrooms
+        elevator
+        indoorParking
+        outdoorParking
+        petsFriendly
+        pool
+        reducedMobility
+        rooms
+        sqMts
+        vigilanceSystem
+        waterAccess
+        waterFront
+      }
+      media {
+        url
+        name
       }
     }
     pageInfo {
@@ -108,6 +128,7 @@ query Nodes($pagination: PaginationArg) {
     }
   }
 }
+
 `;
 
 export const LIST_PROPERTIES_QUERY = gql`
