@@ -20,46 +20,46 @@ import { Property, Property_Plain } from "../generated-interfaces/api/property";
 export const baseURL = "http://localhost:1337";
 
 interface PropertyCardProps {
-  data: Property_Plain;
+  property: Property_Plain;
   onUpdate?: (updatedData: Property_Plain) => void; // Optional callback to notify parent of updates
   viewMode?: "full" | "card"; // New prop to switch between views
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ data }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const theme = useTheme();
 
   return (
     
       <Card sx={{height:1}}>
         <CardMedia>
-          <ImageGallery media={data.media || []} maxImagesToShow={1} />
+          <ImageGallery media={property?.media || []} maxImagesToShow={1} />
         </CardMedia>
         <CardContent>
-          {data.listedPrice && (
+          {property?.listedPrice && (
             <Typography variant="h6" color="primary">
-              {data.listedPrice} $
+              {property.listedPrice} $
             </Typography>
           )}
-          {data.propertyStatus && (
+          {property?.propertyStatus && (
             <Typography
               variant="subtitle1"
               fontWeight="bold"
  
             >
-              {data.propertyStatus}
+              {property?.propertyStatus}
             </Typography>
           )}
-          {data?.location && (
+          {property?.location && (
             <Box display="flex" flexDirection="column" p={0}>
               <Typography variant="caption" color="textSecondary">
-                {data.location?.address}
+                {property.location?.address}
               </Typography>
               <Typography variant="caption" color="textSecondary">
-                {data.location?.city}
+                {property.location?.city}
               </Typography>
 
               <Typography variant="caption" color="textSecondary">
-                {data.location?.neighborhood}
+                {property.location?.neighborhood}
               </Typography>
             </Box>
           )}

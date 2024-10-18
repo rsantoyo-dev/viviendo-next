@@ -6,8 +6,6 @@ import { notFound } from "next/navigation";
 import Paginator from "@/app/components/paginator";
 import PropertyFullView from "@/app/components/property-full-view";
 import PropertyCard from "@/app/components/property-card";
-import ViewList from "@mui/icons-material/ViewList";
-import { ViewModule } from "@mui/icons-material";
 import ViewChanger from "@/app/components/view-changer";
 import { Property, Property_Plain } from "@/app/generated-interfaces/api/property";
 
@@ -52,14 +50,15 @@ export default async function Page({
         </Box>
         
         <Grid2 container padding={2} spacing={6}>
-          {propertiesConnection.nodes.map((property: Property) => (
+          {propertiesConnection.nodes.map((property: Property_Plain) => (
             <>
+           
               {currentPageDisplay === "grid" ? (
                 <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-                  <PropertyCard data={property} />
+                  <PropertyCard property={property} />
                 </Grid2>
               ) : (
-                <PropertyFullView data={property} />
+                <PropertyFullView property={property} />
               )}
             </>
           ))}

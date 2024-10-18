@@ -2,15 +2,15 @@
 
 import { Location } from '../components/shared/Location';
 import { Media } from '../components/shared/Media';
-import { PropertyCharacteristics } from '../components/shared/PropertyCharacteristics';
 import { Building } from '../components/shared/Building';
+import { Features } from '../components/shared/Features';
 import { Location_Plain } from '../components/shared/Location';
 import { Media_Plain } from '../components/shared/Media';
-import { PropertyCharacteristics_Plain } from '../components/shared/PropertyCharacteristics';
 import { Building_Plain } from '../components/shared/Building';
+import { Features_Plain } from '../components/shared/Features';
 import { Location_NoRelations } from '../components/shared/Location';
-import { PropertyCharacteristics_NoRelations } from '../components/shared/PropertyCharacteristics';
 import { Building_NoRelations } from '../components/shared/Building';
+import { Features_NoRelations } from '../components/shared/Features';
 import { AdminPanelRelationPropertyModification } from '../common/AdminPanelRelationPropertyModification';
 
 export enum PropertyStatus {
@@ -36,13 +36,13 @@ export interface Property {
     createdAt: Date;    updatedAt: Date;    publishedAt?: Date;    location?: Location;
     catastroId?: string;
     media?: { data: Media[] };
-    characteristics?: PropertyCharacteristics;
     propertyStatus?: PropertyStatus;
     listedPrice?: number;
     registrationId: string;
     test?: string;
     propertyType?: PropertyType;
     building?: Building;
+    features?: Features;
   };
 }
 export interface Property_Plain {
@@ -50,13 +50,13 @@ export interface Property_Plain {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  location?: Location_Plain;
   catastroId?: string;
   media?: Media_Plain[];
-  characteristics?: PropertyCharacteristics_Plain;
   propertyStatus?: PropertyStatus;
   listedPrice?: number;
   registrationId: string;
   test?: string;
   propertyType?: PropertyType;
   building?: Building_Plain;
+  features?: Features_Plain;
 }
 
 export interface Property_NoRelations {
@@ -64,13 +64,13 @@ export interface Property_NoRelations {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  location?: Location_NoRelations;
   catastroId?: string;
   media?: number[];
-  characteristics?: PropertyCharacteristics_NoRelations;
   propertyStatus?: PropertyStatus;
   listedPrice?: number;
   registrationId: string;
   test?: string;
   propertyType?: PropertyType;
   building?: Building_NoRelations;
+  features?: Features_NoRelations;
 }
 
 export interface Property_AdminPanelLifeCycle {
@@ -78,11 +78,11 @@ export interface Property_AdminPanelLifeCycle {
   createdAt: Date;  updatedAt: Date;  publishedAt?: Date;  location?: Location_Plain;
   catastroId?: string;
   media?: AdminPanelRelationPropertyModification<Media_Plain>[];
-  characteristics?: PropertyCharacteristics_Plain;
   propertyStatus?: PropertyStatus;
   listedPrice?: number;
   registrationId: string;
   test?: string;
   propertyType?: PropertyType;
   building?: Building_Plain;
+  features?: Features_Plain;
 }

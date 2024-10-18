@@ -10,8 +10,7 @@ import {
   CardHeader,
   CardContent,
 } from "@mui/material";
-import { theme } from "../ui/theme";
-import { Subtitles } from "@mui/icons-material";
+
 
 interface DynamicComponentProps {
   title?: string;
@@ -40,7 +39,7 @@ const DynamicComponent: React.FC<DynamicComponentProps> = ({
   };
 
   return (
-    <Card elevation={0} sx={{margin:1}}>
+    <Card elevation={5} sx={{ padding:1}}>
       <Typography variant={'subtitle1'} fontWeight={'bold'} px={2} py={0} color="text.secondary">
         {title}
       </Typography>

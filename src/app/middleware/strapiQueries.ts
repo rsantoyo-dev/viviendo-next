@@ -104,16 +104,15 @@ query Nodes($pagination: PaginationArg, $sort: [String], $filters: PropertyFilte
       features {
         bathrooms
         elevator
-        indoorParking
-        outdoorParking
-        petsFriendly
+        bedrooms
+        garages
+        parking
+        petsAllowed
         pool
         reducedMobility
-        rooms
-        sqMts
-        vigilanceSystem
+        smokingAllowed
         waterAccess
-        waterFront
+        waterfront
       }
       media {
         url

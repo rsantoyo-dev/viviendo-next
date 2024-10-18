@@ -25,8 +25,7 @@ export default function DashboardLayout({
           <Box
             component="main"
             flexGrow={1}
-            p={0}
-            bgcolor={'gray'}        
+      
           >
             {children}
           </Box>

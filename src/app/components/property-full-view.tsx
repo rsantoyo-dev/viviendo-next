@@ -12,25 +12,27 @@ import {
   Paper,
   IconButton,
   useTheme,
+  Grid2,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import DynamicComponent from "./dynamic-component";
 import ImageGallery from "./image-gallery";
 import { Property, Property_Plain } from "../generated-interfaces/api/property";
+import { DynamicComponentDataModel } from "../middleware/model";
 
 export const baseURL = "http://localhost:1337";
 
 interface PropertyFullViewProps {
-  data: Property_Plain
+  property: Property_Plain
   onUpdate?: (updatedData: Property_Plain) => void; // Optional callback to notify parent of updates
   viewMode?: "full" | "card"; // New prop to switch between views
 }
 
-const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
+const PropertyFullView: React.FC<PropertyFullViewProps> = ({ property }) => {
   const theme = useTheme();
   return (
-    <Card >
+    <Card sx={{width:1}}>
       <Box
         display="flex"
         flexDirection="row"
@@ -40,10 +42,10 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
         {/* Property Info Section */}
         <Box display="flex" flexDirection="column" p={1}>
           <Typography variant="h5" component="div">
-            {data.propertyStatus}
+            {property?.propertyStatus}
           </Typography>
           <Typography variant="subtitle2">
-            {data.location?.address}, {data.location?.city}
+            {property?.location?.address}, {property?.location?.city}
           </Typography>
         </Box>
 
@@ -52,7 +54,7 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
           {/* Price Section */}
           <Box display="flex" p={1}>
             <Typography variant="h5" component="div">
-              ${data.listedPrice}
+              ${property?.listedPrice}
             </Typography>
           </Box>
 
@@ -94,60 +96,34 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ data }) => {
         </Box>
       </Box>
 
-      {JSON.stringify(data.listedPrice)}
-      <ImageGallery media={data.media || []} maxImagesToShow={6} /> 
+      <ImageGallery media={property?.media || []} maxImagesToShow={6} /> 
 
-      {data.characteristics && (
-        <Box flex="1 1 45%">
+      <Grid2 container padding={2} spacing={6}>
+      {property?.features && (
+        <Grid2 size={{ xs: 12, lg: 6 }}>
           <DynamicComponent
-            title="Characteristics"
-            data={data.characteristics} onChange={function (newValue: DynamicComponentDataModel): void {
+            title="Features"
+            data={property.features} onChange={function (newValue: DynamicComponentDataModel): void {
               throw new Error("Function not implemented.");
             } }            
           />
-        </Box>
+        </Grid2>
       )}
-
-      {/* <ImageGallery media={data.media || []} maxImagesToShow={6} /> */}
-
-      {/* {data.characteristics && (
-        <Box flex="1 1 45%">
+      {property?.building && (
+        <Grid2 size={{ xs: 12, lg: 6 }}>
           <DynamicComponent
-            title="Characteristics"
-            data={data.characteristics}
-            onChange={(newValue: DynamicComponentDataModel) => {
-              // Implement your update logic here
-              console.log("Characteristics updated:", newValue);
-            }}
+            title="Building"
+            data={property.building} onChange={function (newValue: DynamicComponentDataModel): void {
+              throw new Error("Function not implemented.");
+            } }            
           />
-        </Box>
-      )} */}
-      {/* <Box display="flex" flexDirection="row" flexWrap="wrap">
-        {data.characteristics && (
-          <Box flex="1 1 45%">
-            <DynamicComponent
-              title="Characteristics"
-              data={data.characteristics}
-              onChange={(newValue: DynamicComponentDataModel) => {
-                // Implement your update logic here
-                console.log("Characteristics updated:", newValue);
-              }}
-            />
-          </Box>
-        )}
-        {data.location && (
-          <Box flex="1 1 45%">
-            <DynamicComponent
-              title="Location"
-              data={data.location}
-              onChange={(newValue: DynamicComponentDataModel) => {
-                // Implement your update logic here
-                console.log("Location updated:", newValue);
-              }}
-            />
-          </Box>
-        )}
-      </Box> */}
+        </Grid2>
+      )}
+      </Grid2>
+
+      
+
+      
 
       {/* Action Buttons */}
       <CardActions>
