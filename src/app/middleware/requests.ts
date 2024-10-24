@@ -1,7 +1,7 @@
 import client from "../apolloClient";
 import { Agent } from "../generated-interfaces/api/agent";
 import { Property } from "../generated-interfaces/api/property";
-import {  PropertiesConnectionResponse } from "./model";
+import {  PropertiesConnectionResponse, PropertyFiltersInput } from "./model";
 import {
   LIST_AGENTS_QUERY,
   LIST_PROPERTIES_QUERY,
@@ -13,19 +13,31 @@ import gql from "graphql-tag";
 
 export async function fetchPropertiesConnection(
   page: number = 1,
-  pageSize: number = 3
+  pageSize: number = 3,
+  filters?: PropertyFiltersInput,
+  sort?: string[],
 ): Promise<PropertiesConnectionResponse> {
   try {
+    const variables: any = {
+      pagination: {
+        page,
+        pageSize,
+      },
+    };
+
+    if (filters) {
+      variables.filters = filters;
+    }
+
+    if (sort && sort.length > 0) {
+      variables.sort = sort;
+    }
+
     const { data } = await client.query<{
       properties_connection: PropertiesConnectionResponse;
     }>({
       query: PROPERTIES_CONNECTION_QUERY,
-      variables: {
-        pagination: {
-          page,
-          pageSize,
-        },
-      },
+      variables,
       fetchPolicy: "no-cache", // Ensures the data is not cached
     });
 

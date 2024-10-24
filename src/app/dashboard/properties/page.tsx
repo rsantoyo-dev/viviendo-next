@@ -1,13 +1,16 @@
 // app/properties/page.tsx
-import { PropertiesConnectionResponse } from "@/app/middleware/model";
+import { PropertiesConnectionResponse, PropertyFiltersInput } from "@/app/middleware/model";
 import { fetchPropertiesConnection } from "@/app/middleware/requests";
 import { Box, Grid2, IconButton } from "@mui/material";
 import { notFound } from "next/navigation";
 import Paginator from "@/app/components/paginator";
-import PropertyFullView from "@/app/components/property-full-view";
-import PropertyCard from "@/app/components/property-card";
+import PropertyFullView from "@/app/components/properties/property-full-view";
 import ViewChanger from "@/app/components/view-changer";
 import { Property, Property_Plain } from "@/app/generated-interfaces/api/property";
+import PropertiesHeader from "@/app/components/properties/properties-header";
+import PropertyCard from "@/app/components/properties/property-card";
+import RangeSlider from "@/app/components/properties/range-slider";
+import PropertyFilters from "@/app/components/properties/PropertyFilters";
 
 const PAGE_SIZE = 4;
 
@@ -26,10 +29,21 @@ export default async function Page({
     isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
 
   let propertiesConnection: PropertiesConnectionResponse;
+
+  const minPriceParam = searchParams.minPrice;
+
+
+  const filters: PropertyFiltersInput = {};
+
+  filters.listedPrice = searchParams.minPrice ? { gt: parseFloat(searchParams.minPrice as string) } : undefined;
+  const sort = ["listedPrice:ASC"];
+
   try {
     propertiesConnection = await fetchPropertiesConnection(
       validCurrentPage,
-      currentPageDisplay === "grid" ? PAGE_SIZE : 1
+      currentPageDisplay === "grid" ? PAGE_SIZE : 1,
+      filters,
+      sort
     );
   } catch (error) {
     console.error("Error fetching properties:", error);
@@ -39,15 +53,8 @@ export default async function Page({
   if (propertiesConnection?.nodes.length > 0) {
     return (
       <Box>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box width={0.5}>
-            <Paginator
-              currentPage={propertiesConnection.pageInfo.page}
-              totalPages={propertiesConnection.pageInfo.pageCount}
-            />
-          </Box>
-          <ViewChanger />
-        </Box>
+        <PropertiesHeader {...propertiesConnection.pageInfo}/>
+       
         
         <Grid2 container padding={2} spacing={6}>
           {propertiesConnection.nodes.map((property: Property_Plain) => (

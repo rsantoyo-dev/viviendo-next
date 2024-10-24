@@ -5,7 +5,7 @@ import SettingsBar from "./settings-bar";
 import { flattenAndRenameObject } from "../utilities/helpers";
 import DynamicEntity from "./dynamic-entity";
 import { Entity, Property } from "../middleware/model"; // Import Entity type
-import PropertyFullView from "./property-full-view";
+import PropertyFullView from "./properties/property-full-view";
 
 interface DynamicEntityListProps {
   data: Entity[]; // The dataset can be an array of Property or Agent

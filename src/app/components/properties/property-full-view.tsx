@@ -16,17 +16,16 @@ import {
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import DynamicComponent from "./dynamic-component";
-import ImageGallery from "./image-gallery";
-import { Property, Property_Plain } from "../generated-interfaces/api/property";
-import { DynamicComponentDataModel } from "../middleware/model";
+import DynamicComponent from "../dynamic-component";
+import ImageGallery from "../image-gallery";
+import { Property, Property_Plain } from "../../generated-interfaces/api/property";
+import { DynamicComponentDataModel } from "../../middleware/model";
 
 export const baseURL = "http://localhost:1337";
 
 interface PropertyFullViewProps {
   property: Property_Plain
   onUpdate?: (updatedData: Property_Plain) => void; // Optional callback to notify parent of updates
-  viewMode?: "full" | "card"; // New prop to switch between views
 }
 
 const PropertyFullView: React.FC<PropertyFullViewProps> = ({ property }) => {
@@ -98,9 +97,9 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ property }) => {
 
       <ImageGallery media={property?.media || []} maxImagesToShow={6} /> 
 
-      <Grid2 container padding={2} spacing={6}>
+      <Grid2 container padding={1} spacing={1}>
       {property?.features && (
-        <Grid2 size={{ xs: 12, lg: 6 }}>
+        <Grid2 size={{ xs: 12, md: 6 }}>
           <DynamicComponent
             title="Features"
             data={property.features} onChange={function (newValue: DynamicComponentDataModel): void {
@@ -110,7 +109,7 @@ const PropertyFullView: React.FC<PropertyFullViewProps> = ({ property }) => {
         </Grid2>
       )}
       {property?.building && (
-        <Grid2 size={{ xs: 12, lg: 6 }}>
+        <Grid2 size={{ xs: 12, md: 6 }}>
           <DynamicComponent
             title="Building"
             data={property.building} onChange={function (newValue: DynamicComponentDataModel): void {

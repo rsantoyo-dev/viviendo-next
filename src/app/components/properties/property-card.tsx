@@ -12,17 +12,16 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import ImageGallery from "./image-gallery";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import { Property, Property_Plain } from "../generated-interfaces/api/property";
+import { Property_Plain } from "@/app/generated-interfaces/api/property";
+import ImageGallery from "../image-gallery";
 
 export const baseURL = "http://localhost:1337";
 
 interface PropertyCardProps {
   property: Property_Plain;
   onUpdate?: (updatedData: Property_Plain) => void; // Optional callback to notify parent of updates
-  viewMode?: "full" | "card"; // New prop to switch between views
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {

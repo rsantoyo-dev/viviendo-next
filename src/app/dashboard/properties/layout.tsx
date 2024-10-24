@@ -2,8 +2,11 @@
 import { Box } from "@mui/material";
 
 
+const PAGE_SIZE = 4;
+
+
 export default async function DashboardLayout({
-  children, // will be a page or nested layoutnpm install @mui/icons-material @mui/material @emotion/styled @emotion/react
+  children,
 }: {
   children: React.ReactNode;
 }) {
