@@ -18,9 +18,9 @@ const Paginator: FC<PaginatorProps> = ({ currentPage, totalPages }) => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 
     // Update the URL with the new page number
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', value.toString());
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    // const params = new URLSearchParams(searchParams.toString());
+    // params.set('page', value.toString());
+    // router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (

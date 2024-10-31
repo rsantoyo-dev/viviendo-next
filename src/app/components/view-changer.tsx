@@ -1,45 +1,55 @@
-'use client';
+// app/components/properties/ViewChanger.tsx
+"use client";
 
-import { ViewList, ViewModule } from '@mui/icons-material';
-import { Box, IconButton } from '@mui/material';
-import { useRouter, useSearchParams } from "next/navigation"; // Use 'next/navigation' for App Router
-import React from 'react';
+import { ViewList, ViewModule } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 const ViewChanger = () => {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const [view, setView] = React.useState('single');
+  const { replace } = useRouter();
+  const pathname = usePathname();
 
-    const handleViewChange = (newView: string) => {
-        setView(newView);
-        const params = new URLSearchParams(searchParams.toString());
+  const searchParams = useSearchParams();
 
-        if (newView === 'grid') {
-            params.set('display', 'grid');
-        } else {
-            params.delete('display'); // Remove the 'display' parameter when in 'single' view
-        }
+  // Derive the current view mode from the 'display' query parameter. Default to 'single' if not present.
+  const display = searchParams.get("display");
+  console.log("display:", display);
 
-        // Push the updated URL
-        router.push(`${window.location.pathname}?${params.toString()}`);
-    };
+  // Handler to change the view mode
+  const handleViewChange = (newView: string) => {
+    // Clone existing search parameters to preserve other query params like 'minPrice' and 'maxPrice'
+    
+    const newSearchParams = new URLSearchParams(searchParams.toString());
 
-    return (
-        <Box>
-            <IconButton
-                onClick={() => handleViewChange('single')}
-                color={view === 'single' ? 'primary' : 'default'}
-            >
-                <ViewList />
-            </IconButton>
-            <IconButton
-                onClick={() => handleViewChange('grid')}
-                color={view === 'grid' ? 'primary' : 'default'}
-            >
-                <ViewModule />
-            </IconButton>
-        </Box>
-    );
+    console.log("newView:", newView);
+
+     newSearchParams.set("display", newView);
+
+    // // // Update the URL with the new search parameters without adding a new history entry
+     replace(`${pathname}?${newSearchParams.toString()}`);
+  };
+
+  return (
+    <Box>
+      <IconButton
+        onClick={() => handleViewChange("single")}
+        color={display === "single" ? "primary" : "default"}
+        aria-label="Single View"
+        aria-pressed={display === "single"}
+      >
+        <ViewList />
+      </IconButton>
+      <IconButton
+        onClick={() => handleViewChange("grid")}
+        color={display === "grid" ? "primary" : "default"}
+        aria-label="Grid View"
+        aria-pressed={display === "grid"}
+      >
+        <ViewModule />
+      </IconButton>
+    </Box>
+  );
 };
 
 export default ViewChanger;

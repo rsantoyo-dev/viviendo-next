@@ -13,7 +13,7 @@ import gql from "graphql-tag";
 
 export async function fetchPropertiesConnection(
   page: number = 1,
-  pageSize: number = 3,
+  pageSize: number = 1,
   filters?: PropertyFiltersInput,
   sort?: string[],
 ): Promise<PropertiesConnectionResponse> {
@@ -24,6 +24,7 @@ export async function fetchPropertiesConnection(
         pageSize,
       },
     };
+
 
     if (filters) {
       variables.filters = filters;
