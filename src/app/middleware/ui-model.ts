@@ -1,8 +1,8 @@
 import { iconMap } from "../ui/icons";
 
 export enum ViewVariant {
-    'list',
-    'grid',
+    Single = 'single',
+    Grid = 'grid',
     
 }
 

@@ -10,6 +10,7 @@ import { Property, Property_Plain } from "@/app/generated-interfaces/api/propert
 import PropertiesHeader from "@/app/components/properties/properties-header";
 import PropertyCard from "@/app/components/properties/property-card";
 import RangeSlider from "@/app/components/properties/range-slider";
+import { ViewVariant } from "@/app/middleware/ui-model";
 
 const PAGE_SIZE = 4;
 
@@ -40,16 +41,16 @@ export default async function Page({
 
 
 
-  const currentPageDisplay = searchParams.display;
+  const currentPageDisplay = searchParams.view;
   
-  console.log('currentPageDisplay:', searchParams.display);
+  console.log('currentPageDisplay:', searchParams.view);
 
   const sort = ["listedPrice:ASC"];
 
   try {
     propertiesConnection = await fetchPropertiesConnection(
       validCurrentPage,
-      currentPageDisplay === "grid" ? PAGE_SIZE : 1,
+      currentPageDisplay ===ViewVariant.Single? PAGE_SIZE : 1,
       filters,
       sort
     );
@@ -66,7 +67,7 @@ export default async function Page({
         <Grid2 container padding={2} spacing={6}>
           {propertiesConnection.nodes.map((property: Property_Plain) => (
             <>
-              {currentPageDisplay === "grid" ? (
+              {currentPageDisplay === ViewVariant.Grid ? (
                 <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
                   <PropertyCard property={property} />
                 </Grid2>

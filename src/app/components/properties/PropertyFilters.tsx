@@ -7,29 +7,38 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 const PropertyFilters = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
-
-
+  const router = useRouter();
 
   // Handle filter changes from RangeSlider
   const handleFilterChange = (filter: NumberFilter) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    console.log(filter);
+    console.log("Filter:", filter);
+    // Clone existing search parameters
+    const newSearchParams = new URLSearchParams(searchParams.toString());
 
-    newSearchParams.set("gte", filter.gte?.toString() || "");
-    newSearchParams.set("lte", filter.lte?.toString() || "");
+    // Update 'gte' and 'lte' parameters
+    (["gte", "lte"] as Array<keyof NumberFilter>).forEach((param) => {
+      const value =
+        filter[param] !== undefined
+          ? Math.floor(filter[param] as number)
+          : undefined;
+      value !== undefined
+        ? newSearchParams.set(param, value.toString())
+        : newSearchParams.delete(param);
+    });
 
-    replace(`${pathname}?${newSearchParams.toString()}`);
+    // Update the URL
+    router.replace(`${pathname}?${newSearchParams.toString()}`);
   };
+
   return (
     <>
-      <RangeSlider 
-        onFilterChange={handleFilterChange} 
-        gte={searchParams.get('gte') ? Number(searchParams.get('gte')) : undefined} 
-        lte={searchParams.get('lte') ? Number(searchParams.get('lte')) : undefined} 
+      <RangeSlider
+        onFilterChange={handleFilterChange}
+        gte={searchParams.get("gte") ? Number(searchParams.get("gte")) : undefined}
+        lte={searchParams.get("lte") ? Number(searchParams.get("lte")) : undefined}
       />
-      {searchParams.get('gte') }  -   {searchParams.get('lte') }
-     </>
+      {searchParams.get("gte")} - {searchParams.get("lte")}
+    </>
   );
 };
 
