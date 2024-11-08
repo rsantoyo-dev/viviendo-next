@@ -1,12 +1,18 @@
 // app/properties/page.tsx
-import { PropertiesConnectionResponse, PropertyFiltersInput } from "@/app/middleware/model";
+import {
+  PropertiesConnectionResponse,
+  PropertyFiltersInput,
+} from "@/app/middleware/model";
 import { fetchPropertiesConnection } from "@/app/middleware/requests";
-import { Box, Grid2, IconButton } from "@mui/material";
+import { Box, Grid, IconButton } from "@mui/material";
 import { notFound } from "next/navigation";
 import Paginator from "@/app/components/paginator";
 import PropertyFullView from "@/app/components/properties/property-full-view";
 import ViewChanger from "@/app/components/view-changer";
-import { Property, Property_Plain } from "@/app/generated-interfaces/api/property";
+import {
+  Property,
+  Property_Plain,
+} from "@/app/generated-interfaces/api/property";
 import PropertiesHeader from "@/app/components/properties/properties-header";
 import PropertyCard from "@/app/components/properties/property-card";
 import RangeSlider from "@/app/components/properties/range-slider";
@@ -20,7 +26,7 @@ export default async function Page({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const currentPageParam = searchParams.page;
-  
+
   const currentPage = Array.isArray(currentPageParam)
     ? parseInt(currentPageParam[0], 10)
     : parseInt(currentPageParam || "1", 10);
@@ -32,25 +38,26 @@ export default async function Page({
 
   const minPriceParam = searchParams.minPrice;
 
-
   const filters: PropertyFiltersInput = {};
 
   filters.listedPrice = {};
-  filters.listedPrice.gte = searchParams.minPrice ? parseFloat(searchParams.minPrice as string) : undefined;
-  filters.listedPrice.lte = searchParams.maxPrice ? parseFloat(searchParams.maxPrice as string) : undefined;
-
-
+  filters.listedPrice.gte = searchParams.minPrice
+    ? parseFloat(searchParams.minPrice as string)
+    : undefined;
+  filters.listedPrice.lte = searchParams.maxPrice
+    ? parseFloat(searchParams.maxPrice as string)
+    : undefined;
 
   const currentPageDisplay = searchParams.view;
-  
-  console.log('currentPageDisplay:', searchParams.view);
+
+  console.log("currentPageDisplay:", searchParams.view);
 
   const sort = ["listedPrice:ASC"];
 
   try {
     propertiesConnection = await fetchPropertiesConnection(
       validCurrentPage,
-      currentPageDisplay ===ViewVariant.Single? PAGE_SIZE : 1,
+      currentPageDisplay === ViewVariant.Single ? PAGE_SIZE : 1,
       filters,
       sort
     );
@@ -59,24 +66,25 @@ export default async function Page({
     notFound();
   }
 
- 
   return (
     <Box>
       <PropertiesHeader {...propertiesConnection.pageInfo} />
       {propertiesConnection?.nodes.length > 0 ? (
-        <Grid2 container padding={2} spacing={6}>
-          {propertiesConnection.nodes.map((property: Property_Plain) => (
-            <>
-              {currentPageDisplay === ViewVariant.Grid ? (
-                <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
-                  <PropertyCard property={property} />
-                </Grid2>
-              ) : (
-                <PropertyFullView property={property} />
-              )}
-            </>
-          ))}
-        </Grid2>
+        <Grid
+          container
+          padding={2}
+          spacing={6}
+        >
+          {propertiesConnection.nodes.map((property: Property_Plain) =>
+            currentPageDisplay === ViewVariant.Grid ? (
+              <Grid key={property.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <PropertyCard property={property} />
+              </Grid>
+            ) : (
+              <PropertyFullView key={property.id} property={property} />
+            )
+          )}
+        </Grid>
       ) : (
         <div>No properties found.</div>
       )}

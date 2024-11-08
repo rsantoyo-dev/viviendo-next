@@ -4,11 +4,8 @@ import React from 'react'
 import Paginator from '../paginator'
 import ViewChanger from '../view-changer'
 import { PageInfo } from '@/app/middleware/model'
-import PropertyFilters from './PropertyFilters';
+import PriceFilter from './PriceFilter';
 
-interface PropertiesHeaderProps {
-    pageInfo: PageInfo
-}
 
 const PropertiesHeader = (pageInfo: PageInfo) => {
      // Handle filter changes from RangeSlider
@@ -22,7 +19,7 @@ const PropertiesHeader = (pageInfo: PageInfo) => {
             />
           </Box>
           <ViewChanger />
-          <PropertyFilters />
+          <PriceFilter />
 
         </Box>
   )

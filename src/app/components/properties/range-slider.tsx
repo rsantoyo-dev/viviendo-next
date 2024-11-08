@@ -127,14 +127,14 @@ const RangeSlider: React.FC<RangeSliderProps> = ({ onFilterChange, gte, lte }) =
       filter = {};
     } else if (low > 0 && high === 8) {
       // Only low bound applied
-      filter.gte = actualLow;
+      filter.gte = Math.floor(actualLow);
     } else if (low === 0 && high < 8) {
       // Only high bound applied
-      filter.lte = actualHigh;
+      filter.lte = Math.floor(actualHigh);
     } else if (low > 0 && high < 8) {
       // Both bounds applied
-      filter.gte = actualLow;
-      filter.lte = actualHigh;
+      filter.gte = Math.floor(actualLow);
+      filter.lte = Math.floor(actualHigh);
     }
 
     // Use debounced callback
