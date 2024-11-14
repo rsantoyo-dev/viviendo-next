@@ -1,37 +1,35 @@
 // components/Paginator.tsx
 'use client'; // This must be the first line
 
-import { Palette } from "@mui/icons-material";
-import { Pagination, Stack, useTheme } from "@mui/material";
-import { useRouter, useSearchParams } from "next/navigation"; // Use 'next/navigation' for App Router
-import { FC } from "react";
+import { Pagination, Stack } from "@mui/material";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
-type PaginatorProps = {
-  currentPage: number;
-  totalPages: number;
-};
-
-const Paginator: FC<PaginatorProps> = ({ currentPage, totalPages }) => {
-  const router = useRouter();
+const Paginator: React.FC = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const getPageCount = searchParams.get("pageCount");
+  const getPage = searchParams.get("page");
+
+  const handleChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    console.log("page:", page);
 
     // Update the URL with the new page number
-    // const params = new URLSearchParams(searchParams.toString());
-    // params.set('page', value.toString());
-    // router.push(`${window.location.pathname}?${params.toString()}`);
+    //const params = new URLSearchParams(searchParams.toString());
+    // params.set('page', page.toString());
+    // router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
     <Stack spacing={2} alignItems="center" marginY={4}>
       <Pagination
-        count={totalPages}
-        page={currentPage}
+        count={getPageCount ? parseInt(getPageCount) : 1}
+        page={getPage ? parseInt(getPage) : 1}
         onChange={handleChange}
         color="primary"
-        size="small" />
-      
+        size="small"
+      />
     </Stack>
   );
 };

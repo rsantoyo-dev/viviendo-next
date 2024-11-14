@@ -31,7 +31,7 @@ interface PropertyFullViewProps {
 const PropertyFullView: React.FC<PropertyFullViewProps> = ({ property }) => {
   const theme = useTheme();
   return (
-    <Card sx={{width:1}}>
+    <Card>
       <Box
         display="flex"
         flexDirection="row"

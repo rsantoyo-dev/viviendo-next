@@ -18,9 +18,6 @@ const PropertiesHeader = (pageInfo: PageInfo) => {
               totalPages={pageInfo.pageCount}
             />
           </Box>
-          <ViewChanger />
-          <PriceFilter />
-
         </Box>
   )
 }
